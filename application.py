@@ -121,13 +121,16 @@ def logout():
 def review(book_id):
     rating = request.form.get("rating")
     review = request.form.get("text")
+    book = db.execute(
+        "SELECT * FROM books WHERE id = :book_id", {"book_id": book_id}).fetchone()
+
     if db.execute("SELECT * FROM reviews WHERE user_id = :user_id AND book_id = :book_id", {"user_id": session['user_id'], "book_id": book_id}).rowcount != 0:
         flash("Only one review allowed")
-        book = db.execute(
-            "SELECT * FROM books WHERE id = :book_id", {"book_id": book_id}).fetchone()
+        book = db.execute("SELECT * FROM books WHERE id = :book_id",
+                          {"book_id": book_id}).fetchone()
         form = ReviewForm()
         user_review = db.execute("SELECT * FROM reviews WHERE user_id = :user_id AND book_id = :book_id", {
-            "user_id": session['user_id'], "book_id": book.id}).fetchone()
+                                 "user_id": session['user_id'], "book_id": book.id}).fetchone()
         user_review = user_review.review
         goodreadsData = requests.get("https://www.goodreads.com/book/review_counts.json",
                                      params={"isbns": book.isbn_id, "key": "VzAR63bf45MBzRSC1o1A"})
@@ -140,7 +143,8 @@ def review(book_id):
             "user_id": session['user_id'], "book_id": book_id, "rating": rating, "review": review})
         db.commit()
         flash("Review Submitted!")
-        return redirect(url_for('user', user_id=session['user_id']))
+        return redirect(url_for("book", isbn_id=book.isbn_id))
+        # return redirect(url_for('user', user_id=session['user_id']))
 
 
 @app.route("/api/<string:isbn_id>")
@@ -152,7 +156,7 @@ def api(isbn_id):
     goodreadsData = requests.get("https://www.goodreads.com/book/review_counts.json",
                                  params={"isbns": isbn_id, "key": "VzAR63bf45MBzRSC1o1A"})
     jsonData = json.loads(goodreadsData.text)
-    averageRating = int(jsonData["books"][0]["average_rating"])
+    averageRating = jsonData["books"][0]["average_rating"]
     ratingCount = jsonData["books"][0]["ratings_count"]
     return jsonify({
         "title": book.title,
