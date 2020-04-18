@@ -1,0 +1,46 @@
+{% extends 'layout.html' %} {% block title%} Books {% endblock %} {% block
+body%}
+<div class="row">
+  <form class="form-group" action="{{url_for('books')}}" method="POST">
+    {{ form.csrf_token }}
+    <div class="row">
+      <div class="col">
+        {{ form.search_select.label }}
+      </div>
+      <div class="col">
+        {{ form.search_select }}
+      </div>
+    </div>
+    <div>
+      {{ form.search_value(class_="form-control") }}
+    </div>
+    <div>
+      {{ form.submit(class_="btn btn-block btn-primary") }}
+    </div>
+  </form>
+</div>
+<div>
+  <table>
+    <th>ISBN</th>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Year</th>
+
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>
+          <a href="{{ url_for('book', isbn_id = book.isbn_id) }}"
+            >{{ book.isbn_id}}</a
+          >
+        </td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.year}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

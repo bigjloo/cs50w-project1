@@ -1,0 +1,24 @@
+{% extends "layout.html" %}{% block title%} User Dashboard {% endblock %} {%
+block body %}
+<div class="row justify-content-center">
+  <form class="form-group" action="{{url_for('books')}}" method="POST">
+    {{ form.csrf_token }}
+
+    <div class="row">
+      <div class="col">
+        {{ form.search_select.label }}
+      </div>
+      <div class="col">
+        {{form.search_select }}
+      </div>
+    </div>
+    <div>
+      {{ form.search_value(class_="form-control") }}
+    </div>
+    <div>
+      {{ form.submit(class_="btn btn-primary btn-block") }}
+    </div>
+  </form>
+</div>
+
+{% endblock %}

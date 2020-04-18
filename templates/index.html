@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% block title%} Login {% endblock %} 
+
+{%block body %}
+<div class="row justify-content-center">
+  <div class="row">
+  <form class="form-group" action="{{ url_for('index') }}" method="POST">
+    {{ form.csrf_token }}
+    <h3 style="text-align: center;">Login</h3>
+    <div class=>
+      {{ form.username(class_="form-control", placeholder="Username") }}
+    </div>
+    <div>
+      {{form.password(class_="form-control", placeholder="Password")}}
+    </div>
+    <div>
+      <div>{{ form.submit(class_="btn-block btn btn-outline-primary")}}</div>
+      <div style="text-align: center;">
+        <a href="{{ url_for('register')}}">Register</a>
+      </div>
+    </div>
+    
+    </form>
+  </div>
+</div>
+{% endblock %}

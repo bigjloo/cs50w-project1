@@ -1,0 +1,49 @@
+{% extends 'layout.html' %} {% block title%} Book page {% endblock %} {% block
+body%}
+<div>
+  <h3>{{ book.title}}<small class="text-muted"> by {{ book.author}}</small></h3>
+  <div>
+    <div class="row">
+      <div class="col">
+        <small>ISBN: {{ book.isbn_id}}</small>
+      </div>
+      <div class="col"><small>Publication year: {{ book.year}}</small></div>
+    </div>
+    <div>
+      {% for book in data.json().books %}
+      <p>
+        Average rating: <strong>{{book.average_rating}}</strong>
+        <small>({{ book.ratings_count}} ratings)</small>
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% if user_review %}
+<div class="m-auto p-auto">
+  <h5>{{session['username']}} review:</h5>
+  <p>{{ user_review }}</p>
+</div>
+{% endif %}
+<div>
+  <form
+    class="form-group"
+    action="{{ url_for('review', book_id=book.id) }}"
+    method="POST"
+  >
+    {{ form.csrf_token }}
+    <div class="row">
+      <div class="col">{{ form.rating.label}} {{ form.rating}}</div>
+    </div>
+    <div>
+      <div>{{ form.text.label}}</div>
+      <div>{{ form.text(cols="55", rows="5")}}</div>
+    </div>
+    <div>
+      {{form.submit(class_="btn btn-primary")}}
+    </div>
+  </form>
+</div>
+<div></div>
+
+{% endblock %}

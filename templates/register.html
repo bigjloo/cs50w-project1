@@ -1,0 +1,31 @@
+{% extends "layout.html" %} {% block title%} Registration page {% endblock %}
+{%block body %}
+<div>
+  <div class="row justify-content-center">
+    <form class="form-group" action="{{ url_for('register') }}" method="POST">
+      {{ form.csrf_token }}
+      <div>
+        {{ form.username.label}}
+      </div>
+      <div>
+        {{ form.username(class_="form-control")}}
+      </div>
+      <div>
+        {{form.password.label}}
+      </div>
+      <div>
+        {{ form.password(class_="form-control")}}
+      </div>
+      <div>
+        {{form.confirmPassword.label}}
+      </div>
+      <div>
+        {{form.confirmPassword(class_="form-control")}}
+      </div>
+      <div>
+        {{form.submit(class_="btn btn-block btn-primary")}}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
